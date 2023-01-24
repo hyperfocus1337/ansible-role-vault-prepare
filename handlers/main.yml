@@ -1,0 +1,10 @@
+---
+
+- name: Reboot system
+  ansible.builtin.reboot:
+    msg: Rebooting the system after disabling SELinux
+
+- name: Restart ssh
+  ansible.builtin.service:
+    name: sshd
+    state: restarted

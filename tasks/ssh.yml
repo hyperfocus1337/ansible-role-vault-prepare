@@ -1,0 +1,26 @@
+---
+- name: Add SSH key to authorized keys file
+  ansible.posix.authorized_key:
+    user: "{{ vault_user }}"
+    key: "{{ lookup('file', '../../../{{ ansible_ssh_public_key_file }}') }}"
+    state: present
+
+- name: Disable password authentication
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+    backup: true
+  notify:
+    - Restart ssh
+
+- name: Disable root login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+    backup: true
+  notify:
+    - Restart ssh

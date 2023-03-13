@@ -1,0 +1,16 @@
+---
+- name: Add user to sudo in sudoers file ({{ vault_user }})
+  ansible.builtin.lineinfile:
+    path: "/etc/sudoers.d/{{ vault_user }}"
+    line: "{{ vault_user }} ALL=(ALL) NOPASSWD: ALL"
+    state: present
+    mode: "0440"
+    create: true
+    validate: "/usr/sbin/visudo visudo -cf %s"
+
+- name: Make sure includedir is present in sudoers (# does not mean comment)
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    line: "#includedir /etc/sudoers.d"
+    state: present
+    validate: "/usr/sbin/visudo -cf %s"

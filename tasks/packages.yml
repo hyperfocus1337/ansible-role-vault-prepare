@@ -1,0 +1,9 @@
+---
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - bind-utils
+    - vim
+    - unzip
